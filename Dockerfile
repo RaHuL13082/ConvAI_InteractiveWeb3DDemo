@@ -3,7 +3,7 @@ FROM node:16-alpine AS dependencies
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY package.json ./
-RUN npm i --only=production --legacy-peer-deps
+RUN npm i --only=production
 
 # Rebuild the source code only when needed
 FROM node:16-alpine AS builder
