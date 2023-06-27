@@ -2,7 +2,7 @@ name: Playground Prod Deployment
 
 on:
   push:
-    branches: ['main']
+    branches: ["main"]
 
 env:
   CLOUD_RUN_PROJECT_ID_PROD_1: ${{ secrets.CLOUD_RUN_PROJECT_NAME_PROD_1 }}
