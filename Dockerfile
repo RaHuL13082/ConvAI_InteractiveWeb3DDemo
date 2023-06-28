@@ -1,29 +1,18 @@
-# Get NPM packages
-FROM node:16-alpine AS dependencies
-RUN apk add --no-cache libc6-compat
-WORKDIR /app
-COPY package.json ./
-RUN npm i --only=production
-
-# Rebuild the source code only when needed
-FROM node:16-alpine AS builder
-WORKDIR /app
-COPY . .
-COPY --from=dependencies /app/node_modules ./node_modules
-RUN npm run build --prod
-
-# Production image, copy all the files and run next
-FROM node:16-alpine AS runner
+# build environment
+FROM node:16-alpine as react-build
 WORKDIR /app
 
-ENV NODE_ENV production
+COPY . ./
+RUN npm install
+RUN npm run build
 
-RUN addgroup -g 1001 -S nodejs
+# server environment
+FROM nginx:alpine
+COPY nginx.conf /etc/nginx/conf.d/configfile.template
 
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/public ./public
+COPY --from=react-build /app/build /usr/share/nginx/html
 
-EXPOSE 3000
-
-CMD ["npm", "start"]
+ENV PORT 8080
+ENV HOST 0.0.0.0
+EXPOSE 8080
+CMD sh -c "envsubst '\$PORT' < /etc/nginx/conf.d/configfile.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
