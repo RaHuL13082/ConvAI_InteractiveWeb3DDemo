@@ -1,9 +1,10 @@
 import "./index.css";
-import { useRef, useEffect } from "react";
-import { Html } from "@react-three/drei";
+import { useEffect, useState } from "react";
+
 const ChatBubblev1 = (props) => {
   var { userText, npcText, setPos, keyPressed } = props;
-
+  const [feedback, setFeedback] = useState(0);
+  //Sets the position of chatUI on the canvas
   useEffect(() => {
     setPos([-9.3, -2.5, 2.5]);
   }, []);
@@ -12,9 +13,6 @@ const ChatBubblev1 = (props) => {
     <div
       style={{
         width: "100%",
-        // borderStyle: "solid",
-        // borderWidth: "2px",
-        // borderColor: "red",
       }}
     >
       <section
@@ -25,9 +23,6 @@ const ChatBubblev1 = (props) => {
           borderRadius: "10px",
           background: "rgba(0, 0, 0, 0.7)",
           display: "flex",
-          // borderStyle: "solid",
-          // borderWidth: "2px",
-          // borderColor: "red",
         }}
       >
         <section
@@ -38,7 +33,7 @@ const ChatBubblev1 = (props) => {
             marginTop: "25px",
           }}
         >
-          {console.log("keypressed", keyPressed)}
+          {/* {console.log("keypressed", keyPressed)} */}
           {keyPressed && (
             <div className="icon">
               <span className="span-prop" />
@@ -47,26 +42,38 @@ const ChatBubblev1 = (props) => {
             </div>
           )}
           {userText === "" ? (
-            <form style={{ width: "100%" }}>
-              <input
-                className="placeholder3"
-                style={{
-                  backgroundColor: "rgba(0, 0, 0, 0.01)",
-                  borderWidth: "0px",
-                  // position: "absolute",
-                  width: "95%",
-                  marginLeft: "20px",
-                  marginTop: "30px",
-                  color: "white",
-                  // borderStyle: "solid",
-                  // borderWidth: "2px",
-                  // borderColor: "red",
-                }}
-                placeholder="Press [Space] to talk or type your responses here"
-                type="text"
-              />
-            </form>
+            <p
+              style={{
+                maxHeight: "300px",
+                width: "100%",
+                color: "rgba(219,168,66,255)",
+                marginTop: "25px",
+                marginLeft: "20px",
+                marginRight: "15px",
+              }}
+            >
+              Press [Space] to talk
+            </p>
           ) : (
+            // <form style={{ width: "100%" }}>
+            //   <input
+            //     className="placeholder3"
+            //     style={{
+            //       backgroundColor: "rgba(0, 0, 0, 0.01)",
+            //       borderWidth: "0px",
+            //       // position: "absolute",
+            //       width: "95%",
+            //       marginLeft: "20px",
+            //       marginTop: "30px",
+            //       color: "white",
+            //       // borderStyle: "solid",
+            //       // borderWidth: "2px",
+            //       // borderColor: "red",
+            //     }}
+            //     placeholder="Press [Space] to talk or type your responses here"
+            //     type="text"
+            //   />
+            // </form>
             <div style={{ width: "100%" }}>
               <p
                 style={{
@@ -76,9 +83,6 @@ const ChatBubblev1 = (props) => {
                   paddingLeft: "20px",
                   marginBottom: "-10px",
                   marginTop: "10px",
-                  // borderStyle: "solid",
-                  // borderWidth: "2px",
-                  // borderColor: "red",
                 }}
               >
                 {userText}
@@ -107,12 +111,29 @@ const ChatBubblev1 = (props) => {
               }}
             >
               <img
-                style={{ marginRight: "10px" }}
-                src="Thumbsup_outline.png"
+                style={{ marginRight: "10px", cursor: "pointer" }}
+                src={
+                  feedback === 1 ? "Thumbsup_fill.png" : "Thumbsup_outline.png"
+                }
                 alt=""
                 height="20px"
+                onClick={
+                  feedback === 1 ? () => setFeedback(0) : () => setFeedback(1)
+                }
               ></img>
-              <img src="Thumbsdownoutline.png" alt="" height="20px"></img>
+              <img
+                style={{ cursor: "pointer" }}
+                src={
+                  feedback === 2
+                    ? "Thumbsdown_fill.png"
+                    : "Thumbsdownoutline.png"
+                }
+                alt=""
+                height="20px"
+                onClick={
+                  feedback === 2 ? () => setFeedback(0) : () => setFeedback(2)
+                }
+              ></img>
             </div>
           )}
           <div

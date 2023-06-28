@@ -1,7 +1,6 @@
 import "./index.css";
 import { useRef, useEffect, useState } from "react";
-import { Html } from "@react-three/drei";
-import ChatHistory from "./ChatHistory";
+
 const ChatBubblev2 = (props) => {
   var {
     userText,
@@ -15,16 +14,20 @@ const ChatBubblev2 = (props) => {
   } = props;
   const [value, setValue] = useState("");
   const containerRef = useRef(null);
+  const [feedbacks, setFeedbacks] = useState(Array(messages.length).fill(0));
+  //Sets the position of chatUI on the canvas
   useEffect(() => {
     setPos([-9, 0.3, 2.5]);
   }, []);
 
+  //To keep the scroll bar fixed to the bottom
   useEffect(() => {
     const container = containerRef.current;
     container.scrollTop = container.scrollHeight;
-    console.log("Mes", messages);
+    // console.log("Mes", messages);
   });
 
+  //Handles the input from the textBox
   const handleChange = (e) => {
     e.stopPropagation();
     setValue(e.target.value);
@@ -130,14 +133,32 @@ const ChatBubblev2 = (props) => {
                         >
                           <img
                             style={{ paddingRight: "10px" }}
-                            src="Thumbsup_outline.png"
+                            src={
+                              feedbacks[idx] === 1
+                                ? "Thumbsup_fill.png"
+                                : "Thumbsup_outline.png"
+                            }
                             alt=""
                             height="17px"
+                            onClick={() => {
+                              const newFeedbacks = [...feedbacks];
+                              newFeedbacks[idx] = feedbacks[idx] === 1 ? 0 : 1;
+                              setFeedbacks(newFeedbacks);
+                            }}
                           ></img>
                           <img
-                            src="Thumbsdownoutline.png"
+                            src={
+                              feedbacks[idx] === 2
+                                ? "Thumbsdown_fill.png"
+                                : "Thumbsdownoutline.png"
+                            }
                             alt=""
                             height="17px"
+                            onClick={() => {
+                              const newFeedbacks = [...feedbacks];
+                              newFeedbacks[idx] = feedbacks[idx] === 2 ? 0 : 2;
+                              setFeedbacks(newFeedbacks);
+                            }}
                           ></img>
                         </div>
                       </div>
@@ -261,7 +282,7 @@ const ChatBubblev2 = (props) => {
                 style={{
                   backgroundColor: "rgba(0, 0, 0, 0.01)",
                   borderWidth: "0px",
-                  width: "350px",
+                  width: "90%",
                   color: "white",
                 }}
                 onChange={handleChange}

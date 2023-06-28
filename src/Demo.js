@@ -3,25 +3,26 @@ import { Canvas } from "@react-three/fiber";
 import { Environment, OrbitControls, Html } from "@react-three/drei";
 import { Model } from "./Explorer";
 import { ConvaiClient } from "convai-web-sdk";
-import { SETTINGS } from "./constants";
 import ChatBubble from "./ChatBubble";
-import { Leva, useControls, button } from "leva";
+import { useControls } from "leva";
 import { useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import axios from "axios";
+
 export default function Demo() {
   const [userText, setUserText] = useState("");
-  const finalizedUserText = useRef();
   const [npcText, setNpcText] = useState("");
   const [isTalking, setIsTalking] = useState(false);
-  const [cookies, setCookie, removeCookie] = useCookies(["convai-user-info"]);
   const [avatar, setAvatar] = useState("");
   const [enter, setEnter] = useState(0);
-  const npcTextRef = useRef();
+
+  const [cookies, setCookie, removeCookie] = useCookies(["convai-user-info"]);
 
   const { id } = useParams();
 
+  const npcTextRef = useRef();
   const convaiClient = useRef(null);
+  const finalizedUserText = useRef();
 
   useEffect(() => {
     convaiClient.current = new ConvaiClient({
@@ -59,6 +60,7 @@ export default function Demo() {
       setIsTalking(false);
     });
 
+    //Fetches Character Data from the local storage
     const fetchData = async () => {
       try {
         const url = "https://api.convai.com/character/get";
@@ -74,28 +76,29 @@ export default function Demo() {
         if (avatar !== response.data.model_details.modelLink) {
           setAvatar(response.data.model_details.modelLink);
         }
-        console.log("Avatar:", avatar);
-        console.log("Character Details:", response.data);
+        //console.log("Avatar:", avatar);
+        //console.log("Character Details:", response.data);
       } catch (error) {
-        console.error("Error fetching character:", error);
+        //console.error("Error fetching character:", error);
       }
     };
 
     fetchData();
 
-    console.log("convai", convaiClient.current);
-    console.log("convai-api-key:", cookies.CONVAI_API_KEY);
-    console.log("Session Id:", convaiClient.current.sessionId);
+    //console.log("convai", convaiClient.current);
+    //console.log("convai-api-key:", cookies.CONVAI_API_KEY);
+    //console.log("Session Id:", convaiClient.current.sessionId);
   }, []);
 
   const userInput = (text) => {
     setUserText(text);
-    console.log("Ut: ", userText);
+    //console.log("Ut: ", userText);
   };
 
   const [keyPressed, setKeyPressed] = useState(false);
 
   function handleSpacebarPress(event) {
+    //To check whether the user is not inside the the input area
     if (
       document.activeElement.tagName === "INPUT" ||
       document.activeElement.tagName === "TEXTAREA" ||
@@ -132,6 +135,7 @@ export default function Demo() {
     }
   }
 
+  //Sends user's message to the convai client
   function sendText() {
     finalizedUserText.current = "";
     npcTextRef.current = "";
@@ -148,7 +152,7 @@ export default function Demo() {
     ) {
       if (userText !== "" && enter) {
         sendText();
-        console.log("sent");
+        // console.log("sent");
       }
     }
   }, [enter]);
@@ -174,6 +178,7 @@ export default function Demo() {
   //Stores the options available to the user
   const environmentOptions = ["Snow", "Quattro Canti"];
   const chatUiOptions = [1, 2, 3, 4];
+
   //leva component used to provide UI interface that helps in switching environments
   const { environment, ChatUI_Variant, chathistory } = useControls({
     environment: {
@@ -182,7 +187,7 @@ export default function Demo() {
       label: "Environment",
     },
     ChatUI_Variant: {
-      value: chatUiOptions[0],
+      value: chatUiOptions[2],
       options: chatUiOptions,
       label: "Chat Variant",
     },

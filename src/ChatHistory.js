@@ -1,11 +1,10 @@
+import { useState } from "react";
 const ChatHistory = (props) => {
-  var { history, showHistory, messages } = props;
+  const { history, showHistory, messages } = props;
+  const [feedbacks, setFeedbacks] = useState(Array(messages.length).fill(0));
   return (
     <section>
-      <div
-        className={history ? "chat-Historyo" : "chat-Historyc"}
-        onClick={showHistory}
-      >
+      <div className={history ? "chat-Historyo" : "chat-Historyc"}>
         <div
           style={{
             display: "flex",
@@ -14,7 +13,7 @@ const ChatHistory = (props) => {
         >
           {history ? (
             <img
-              style={{ paddingRight: "20px", marginTop: "1.5vh" }}
+              style={{ paddingRight: "20px", marginTop: "0.9vh" }}
               src="ConvaiLogo.png"
               height="30px"
               width="100px"
@@ -27,13 +26,13 @@ const ChatHistory = (props) => {
         <img
           style={{
             position: "absolute",
-            left: "0.85vw",
-            top: "1.5vh",
+            left: "0.5vw",
+            top: "3.5vw",
             cursor: "pointer",
           }}
           src={history ? "/Collapsein.png" : "/Historyin.png"}
           alt=""
-          height={history ? "30vw" : "34vw"}
+          height={history ? "25vw" : "29vw"}
           onClick={showHistory}
         ></img>
         <div
@@ -42,7 +41,7 @@ const ChatHistory = (props) => {
             width: "95%",
             height: "80%",
             overflow: "auto",
-            marginBottom: "25px",
+            marginBottom: "15px",
             marginTop: "15px",
             marginLeft: "20px",
             textAlign: "left",
@@ -113,14 +112,32 @@ const ChatHistory = (props) => {
                         >
                           <img
                             style={{ paddingRight: "10px" }}
-                            src="Thumbsup_outline.png"
+                            src={
+                              feedbacks[idx] === 1
+                                ? "Thumbsup_fill.png"
+                                : "Thumbsup_outline.png"
+                            }
                             alt=""
                             height="17px"
+                            onClick={() => {
+                              const newFeedbacks = [...feedbacks];
+                              newFeedbacks[idx] = feedbacks[idx] === 1 ? 0 : 1;
+                              setFeedbacks(newFeedbacks);
+                            }}
                           ></img>
                           <img
-                            src="Thumbsdownoutline.png"
+                            src={
+                              feedbacks[idx] === 2
+                                ? "Thumbsdown_fill.png"
+                                : "Thumbsdownoutline.png"
+                            }
                             alt=""
                             height="17px"
+                            onClick={() => {
+                              const newFeedbacks = [...feedbacks];
+                              newFeedbacks[idx] = feedbacks[idx] === 2 ? 0 : 2;
+                              setFeedbacks(newFeedbacks);
+                            }}
                           ></img>
                         </div>
                       </div>

@@ -12,7 +12,7 @@ export function Model(props) {
     ["Explorer", "/explorer.glb"],
     ["TourGuide", "/antonio.glb"],
   ]);
-  console.log("NPC:", props.npc);
+  // console.log("NPC:", props.npc);
   const group = useRef();
   const { nodes, materials, animations } = useGLTF(props.npc);
 
@@ -25,16 +25,16 @@ export function Model(props) {
   // });
 
   // // Load the animation
-  useEffect(() => {
-    const loader = new THREE.AnimationLoader();
-    loader.load("/masculine_kick.glb", (animationClip) => {
-      const mixer = new THREE.AnimationMixer(group.current);
-      const action = mixer.clipAction(animationClip);
-      action.play();
+  // useEffect(() => {
+  //   const loader = new THREE.AnimationLoader();
+  //   loader.load("/masculine_kick.glb", (animationClip) => {
+  //     const mixer = new THREE.AnimationMixer(group.current);
+  //     const action = mixer.clipAction(animationClip);
+  //     action.play();
 
-      mixerRef.current = mixer;
-    });
-  }, []);
+  //     mixerRef.current = mixer;
+  //   });
+  // }, []);
   // const { actions } = useAnimations(animations, group);
   // const handleAnimation = (animationName) => {
   //   var from =
@@ -59,9 +59,9 @@ export function Model(props) {
       <group name="Scene">
         <group name="Armature">
           <primitive object={nodes.Hips} />
-          {console.log("node:", nodes)}
-          {console.log("materials: ", materials)}
-          {console.log("Animations: ", animations)}
+          {/* {console.log("node:", nodes)} */}
+          {/* {console.log("materials: ", materials)} */}
+          {/* {console.log("Animations: ", animations)} */}
           <skinnedMesh
             name="Wolf3D_Avatar"
             geometry={nodes.Wolf3D_Avatar.geometry}

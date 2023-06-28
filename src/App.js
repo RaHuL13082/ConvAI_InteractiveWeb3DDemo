@@ -1,10 +1,5 @@
 import Demo from "./Demo";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { useCookies } from "react-cookie";
 export default function App() {
   const [cookies, setCookie, removeCookie] = useCookies(["convai-user-info"]);
@@ -17,7 +12,7 @@ export default function App() {
             cookies.CONVAI_API_KEY ? (
               <Demo />
             ) : (
-              <Navigate to="/login" replace={true} />
+              (window.location.href = "https://convai.com/auth/login")
             )
           }
         ></Route>

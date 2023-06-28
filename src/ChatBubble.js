@@ -4,8 +4,10 @@ import ChatBubblev1 from "./ChatBubblev1";
 import ChatBubblev4 from "./ChatBubblev4";
 import ChatHistory from "./ChatHistory";
 import { Html } from "@react-three/drei";
+import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "./index.css";
+
 const ChatBubble = (props) => {
   const {
     variant,
@@ -26,6 +28,8 @@ const ChatBubble = (props) => {
   const [messages, setMessages] = useState([]);
   const [characterID, setCharacterID] = useState(characterId);
   const [isHovered, setIsHovered] = useState(false);
+  const navigate = useNavigate();
+
   const showHistory = () => {
     setHistory(!history);
   };
@@ -47,6 +51,11 @@ const ChatBubble = (props) => {
     setUserText("");
     setNpcText("");
   };
+
+  const handleRedirect = () => {
+    navigate(-1);
+  };
+
   useEffect(() => {
     // Retrieve stored data from localStorage
     const storedData = localStorage.getItem("messages");
@@ -93,7 +102,7 @@ const ChatBubble = (props) => {
       setSession(sessionId);
     }
     if (characterID && messages) {
-      console.log("M", messages);
+      // console.log("M", messages);
       const messagesJSON = JSON.stringify(messages);
       const storedData = localStorage.getItem("messages");
 
@@ -141,55 +150,82 @@ const ChatBubble = (props) => {
 
   return (
     <>
-      <Html position={[-8.3, 4.5, 3]}>
-        <div
-          style={{
-            backgroundColor: isHovered
-              ? "rgba(0, 0, 0, 1)"
-              : "rgba(0, 0, 0, 0.7)",
-            borderRadius: "15px",
-            width: "9vw",
-            height: "3vw",
-            color: "white",
-            display: "flex",
-            cursor: "pointer",
-          }}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          onClick={ResetHistory}
-        >
+      <Html position={[-8.45, 4.49, 3]}>
+        <div style={{ display: "flex" }}>
           <div
             style={{
+              backgroundColor: "rgba(0, 0, 0, 0.7)",
+              borderRadius: "10px",
+              width: "2.5vw",
+              height: "2.5vw",
+              color: "white",
               display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              marginLeft: "15px",
+              cursor: "pointer",
+              marginBottom: "10px",
+              marginRight: "10px",
             }}
+            onClick={handleRedirect}
           >
-            <img src="reset.png" height="25vw" width="25vw"></img>
+            <img
+              style={{
+                position: "absolute",
+                left: "0.5vw",
+                top: "0.5vw",
+                cursor: "pointer",
+              }}
+              src="redirect.png"
+              height="25vh"
+              width="25vw"
+            ></img>
           </div>
           <div
             style={{
+              backgroundColor: isHovered
+                ? "rgba(0, 0, 0, 1)"
+                : "rgba(0, 0, 0, 0.7)",
+              borderRadius: "10px",
+              width: "8vw",
+              height: "2.5vw",
+              color: "white",
               display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              marginLeft: "10px",
-              marginRight: "15px",
+              cursor: "pointer",
             }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            onClick={ResetHistory}
           >
-            <p style={{ fontSize: "0.8vw" }}>Reset Session</p>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                marginLeft: "0.8vw",
+              }}
+            >
+              <img src="reset.png" height="20vw" width="20vw"></img>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                marginLeft: "7px",
+                marginRight: "0.5vw",
+                fontWeight: "bold",
+              }}
+            >
+              <p style={{ fontSize: "0.78vw" }}>Reset Session</p>
+            </div>
           </div>
         </div>
-      </Html>
-      {chatHistory === "Show" && (variant === 3 || variant === 1) && (
-        <Html position={[-8.4, 3.8, 3]}>
+        {chatHistory === "Show" && (variant === 3 || variant === 1) && (
           <ChatHistory
             history={history}
             messages={messages}
             showHistory={showHistory}
           ></ChatHistory>
-        </Html>
-      )}
+        )}
+      </Html>
 
       <Html position={pos}>
         {variant === 1 ? (
